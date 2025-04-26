@@ -9,33 +9,34 @@ public class Player_Interaction : MonoBehaviour
 {
     private Camera myCam;                           // Reference to the main camera (used to cast rays from the player view).
     public float rayDistance = 2f;                  // Distance which the player can interact with objects.
-    public float rotateSpeed;
-    public UnityEvent onView;
-    public UnityEvent onFinishView;
-    private Interactable currentInteractable;
-    private bool isViewing;
-    private bool canFinish;
-    public Transform objectViewer;
-    private Vector3 originPosition;
-    private Quaternion originRotation;
-    private AudioPlayer audioPlayer;
+    public float rotateSpeed;                       // Speed at which the player can rotate grabbed objects.
+    public UnityEvent onView;                       // Event triggered when starting an object view.
+    public UnityEvent onFinishView;                 // Event triggered when finishing an object view.
+    private Interactable currentInteractable;       // Currently focused interactable object.
+    private bool isViewing;                         // Whether the player is currently examining an object.
+    private bool canFinish;                         // Whether the player is allowed to exit the examination.
+    public Transform objectViewer;                  // Target position to move objects for close viewing.
+    private Vector3 originPosition;                 // Original position of the object before viewing.
+    private Quaternion originRotation;              // Original rotation of the object before viewing.
+    private AudioPlayer audioPlayer;                // Reference to the AudioPlayer for playing sounds.
 
 
     private void Awake()
     {
-        audioPlayer = GetComponent<AudioPlayer>();
+        audioPlayer = GetComponent<AudioPlayer>();  // Get reference to the AudioPlayer component.
     }
 
     void Start()
     {
-        myCam = Camera.main;                        // Find and store a reference to the Main Camera at the start.
+        myCam = Camera.main;                        // Find and store the Main Camera at the start.
     }
 
     void Update()
     {
-        CheckInteractables();                       // Continuously check if player is aiming at an interactable object.
+        CheckInteractables();                       // Check for interactable objects every frame.
     }
 
+    // Casts a ray to detect interactable objects and handles interaction logic.
     void CheckInteractables()
     {
         if(isViewing)
@@ -95,19 +96,28 @@ public class Player_Interaction : MonoBehaviour
         }
     }
 
+    // Handles what happens when interacting with an item.
     void Interact(Item item)
     {
+        if(item.image != null) 
+            {
+            UI_Manager.instance.SetImage(item.image);
+            }
+
         audioPlayer.PlayAudio(item.audioClip);
         UI_Manager.instance.SetCaptionText(item.text);
         Invoke("CanFinish",item.audioClip.length +0.5f);
     }
 
+    // Called after interaction finishes, allowing player to exit.
     void CanFinish()
     {
         canFinish = true;
         UI_Manager.instance.SetBackImage(true);
+        UI_Manager.instance.SetCaptionText("");
     }
 
+    // Handles logic when player chooses to finish viewing an object.
     void FinishView()
     {
         canFinish = false;
@@ -122,6 +132,7 @@ public class Player_Interaction : MonoBehaviour
         onFinishView.Invoke();
     }
 
+    // Smoothly moves an object to a target position over time.
     IEnumerator MovingObject(Interactable obj, Vector3 position)
     {
         obj.isMoving = true;
@@ -137,6 +148,7 @@ public class Player_Interaction : MonoBehaviour
         obj.isMoving = false;
     }
 
+    // Allows player to rotate the object while examining it.
     private void RotateObject()
     {
         float x = Input.GetAxis("Mouse X");
