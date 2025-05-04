@@ -7,9 +7,14 @@ using UnityEngine.Events;
 public class Interactable : MonoBehaviour
 {
     public Item item;               // The item data associated with this interactable object.
+
+    public UnityEvent onInteract;
+    public UnityEvent CollectItem;
+
     [HideInInspector]
     public bool isMoving;           // Used to prevent interaction while the object is moving.
-    public UnityEvent onInteract;
+
+    
 
   
 }

@@ -20,21 +20,24 @@ public class Player_Interaction : MonoBehaviour
     private Vector3 originPosition;                 // Original position of the object before viewing.
     private Quaternion originRotation;              // Original rotation of the object before viewing.
     private AudioPlayer audioPlayer;                // Reference to the AudioPlayer for playing sounds.
+    private Player_Inventory inventory;             // Reference to Player_Inventory script.
+    public AudioClip writingSound;
 
 
     private void Awake()
     {
-        audioPlayer = GetComponent<AudioPlayer>();  // Get reference to the AudioPlayer component.
+        audioPlayer = GetComponent<AudioPlayer>();      // Get reference to the AudioPlayer component.
+        inventory = GetComponent<Player_Inventory>();   // Get reference to Player_Inventory.
     }
 
     void Start()
     {
-        myCam = Camera.main;                        // Find and store the Main Camera at the start.
+        myCam = Camera.main;    // Find and store the Main Camera at the start.
     }
 
     void Update()
     {
-        CheckInteractables();                       // Check for interactable objects every frame.
+        CheckInteractables();   // Check for interactable objects every frame.
     }
 
     // Casts a ray to detect interactable objects and handles interaction logic.
@@ -146,6 +149,14 @@ public class Player_Interaction : MonoBehaviour
         canFinish = false;
         isViewing = false;
         UI_Manager.instance.SetBackImage(false);  
+
+        if(currentInteractable.item.inventoryItem)
+        {
+            inventory.AddItem(currentInteractable.item);
+            audioPlayer.PlayAudio(writingSound);
+            currentInteractable.CollectItem.Invoke();
+        }
+
         if(currentInteractable.item.grabbable)
         {
             currentInteractable.transform.rotation = originRotation;
