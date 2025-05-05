@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 037561ee0bafef84380bac0a979ab904, type: 3}
-  m_Name: Mug
+  m_Name: Radio Without Battery
   m_EditorClassIdentifier: 
-  grabbable: 1
-  audioClip: {fileID: 8300000, guid: c6c3b5dc2281c9446b0774355482e0ae, type: 3}
-  text: '"A mug... Who does this belong to?
-
-    Doesn''t matter. I don''t need it
-    anyway."'
+  grabbable: 0
+  audioClip: {fileID: 8300000, guid: 324e2f94c55f1d2479f15152cb29ef87, type: 3}
+  text: "\"A radio! This could be useful\u2026 Maybe I can get a signal and find
+    out what's going on.\r\n...Nothing? of course. No batteries. Guess I\u2019ll
+    have to find some..\""
   image: {fileID: 0}
   inventoryItem: 0
   collectMessage: 

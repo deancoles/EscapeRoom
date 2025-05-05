@@ -3,77 +3,89 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 // This script allows the player to detect and interact with objects.
 public class Player_Interaction : MonoBehaviour
 {
-    private Camera myCam;                           // Reference to the main camera (used to cast rays from the player view).
-    public float rayDistance = 2f;                  // Distance which the player can interact with objects.
-    public float rotateSpeed;                       // Speed at which the player can rotate grabbed objects.
-    public UnityEvent onView;                       // Event triggered when starting an object view.
-    public UnityEvent onFinishView;                 // Event triggered when finishing an object view.
-    private Interactable currentInteractable;       // Currently focused interactable object.
-    private bool isViewing;                         // Whether the player is currently examining an object.
-    private bool canFinish;                         // Whether the player is allowed to exit the examination.
-    public Transform objectViewer;                  // Target position to move objects for close viewing.
-    private Vector3 originPosition;                 // Original position of the object before viewing.
-    private Quaternion originRotation;              // Original rotation of the object before viewing.
-    private AudioPlayer audioPlayer;                // Reference to the AudioPlayer for playing sounds.
-    private Player_Inventory inventory;             // Reference to Player_Inventory script.
-    public AudioClip writingSound;
+    // Camera and interaction settings
+    private Camera myCam;                       // Reference to the main camera (used to cast rays from the player view).
+    public float rayDistance = 2f;              // Distance which the player can interact with objects.
+    public float rotateSpeed;                   // Speed at which the player can rotate interactable objects.
+
+    // UnityEvents for interaction flow
+    public UnityEvent onView;                   // Event triggered when starting an object view.
+    public UnityEvent onFinishView;             // Event triggered when finishing an object view.
+
+    // Interaction state tracking
+    private Interactable currentInteractable;   // Currently focused interactable object.
+    private Item currentItem;                   // Item being interacted with.
+    private bool isViewing;                     // Whether the player is currently examining an object.
+    private bool canFinish;                     // Whether the player is allowed to exit the examination.
+
+    // Object viewing transform
+    public Transform objectViewer;              // Target position to move objects for close viewing.
+    private Vector3 originPosition;             // Original position of the object before viewing.
+    private Quaternion originRotation;          // Original rotation of the object before viewing.
+
+    // Audio
+    private AudioPlayer audioPlayer;            // Reference to the AudioPlayer for playing sounds.
+    private Player_Inventory inventory;         // Reference to Player_Inventory script.
+    public AudioClip writingSound;              // The sound that plays when adding an item to inventory.
 
 
     private void Awake()
     {
-        audioPlayer = GetComponent<AudioPlayer>();      // Get reference to the AudioPlayer component.
-        inventory = GetComponent<Player_Inventory>();   // Get reference to Player_Inventory.
+        audioPlayer = GetComponent<AudioPlayer>();      // Find and store the AudioPlayer component on the same GameObject.
+        inventory = GetComponent<Player_Inventory>();   // Find and store the PlayerInventory component on the same GameObject.
     }
 
     void Start()
     {
-        myCam = Camera.main;    // Find and store the Main Camera at the start.
+        myCam = Camera.main;    // Set the Camera reference to the main camera in the scene.
     }
 
     void Update()
     {
-        CheckInteractables();   // Check for interactable objects every frame.
+        CheckInteractables();   // Call the function to check for interactable objects in front of the camera.
     }
 
-    // Casts a ray to detect interactable objects and handles interaction logic.
+    // Function to check for interactable objects using a raycast and handle interaction logic.
     void CheckInteractables()
     {
-        // If currently viewing an object
+        // If the player is already viewing an interactable object
         if (isViewing)
         {
-            // If the object is grabbable and the left mouse button is held
+            // Allow the player to rotate the object if it is marked as grabbable and the left mouse button is held.
             if (currentInteractable.item.grabbable && Input.GetMouseButton(0))
             {
                 RotateObject();
             }
 
-            // If ready to finish and the right mouse button is pressed.
+            // Allow the player to finish viewing if the right mouse button is pressed and finishing is enabled.
             if (canFinish && Input.GetMouseButtonDown(1))
             {
                 FinishView();
             }
+
             return;
         }
 
-        RaycastHit hit;                                                                             // Stores information about what the ray hits.
-        Vector3 rayOrigin = myCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.5f));              // Calculate the origin point of the ray.
+        RaycastHit hit;     // Declare a RaycastHit object to store information about the object hit by the ray.
+        Vector3 rayOrigin = myCam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0.5f));      // Ray origin from centre of camera view..
 
-        // Cast a ray forward from the camera
-        if (Physics.Raycast(rayOrigin,myCam.transform.forward,out hit,rayDistance))
+        // Perform a raycast from the calculated origin in the camera's forward direction, up to the specified rayDistance.
+        if (Physics.Raycast(rayOrigin, myCam.transform.forward, out hit, rayDistance))
         {
-            Interactable interactable = hit.collider.GetComponent<Interactable>();                  // Check if the object hit has an 'Interactable' component.
+            Interactable interactable = hit.collider.GetComponent<Interactable>();      // Check if the object supports interaction.
 
-            // If the object is interactable
-            if (interactable !=null)
+            // If the hit object is interactable,
+            if (interactable != null)
             {
-                UI_Manager.instance.SetHandCursor(true);                                            // If the object is interactable, set the UI cursor to a 'hand' icon.
+                UI_Manager.instance.SetHandCursor(true);        // Highlight object as interactable.
 
-                // If the left mouse button is clicked
+                // If the left mouse button is clicked.
                 if (Input.GetMouseButtonDown(0))
                 {
                     // If the object is currently moving, do not allow interaction.
@@ -82,59 +94,97 @@ public class Player_Interaction : MonoBehaviour
                         return;
                     }
 
-                    currentInteractable = interactable;                                             // Store the interactable object being interacted with.
+                    // Store interactable and invoke its event.
+                    currentInteractable = interactable;
                     currentInteractable.onInteract.Invoke();
 
-                    if(currentInteractable.item != null)
+                    // If the interactable has an associated item.
+                    if (currentInteractable.item != null)
                     {
-                        onView.Invoke();                                                                // Trigger the UnityEvent for beginning a view interaction.
-                        isViewing = true;                                                               // Set the flag to indicate we are now viewing an object.
-                        Interact(currentInteractable.item);                                             // Handle playing sound, showing text/image, etc.
+                        // Invoke the onView UnityEvent and set the isViewing flag to true.
+                        onView.Invoke();
+                        isViewing = true;
 
-                        // If the item is marked as grabbable
+                        bool hasPreviousItem = false;
+
+                        // Loops through interactable's list of previous items
+                        for (int i = 0; i < currentInteractable.previousItem.Length; i++)
+                        {
+                            // Checks if inventory contains required previous item, interact with item and invoke interaction event.
+                            if (inventory.items.Contains(currentInteractable.previousItem[i].requiredItem))
+                            {
+                                // Interact with item and invoke interaction event.
+                                Interact(currentInteractable.previousItem[i].interactionItem);
+                                currentInteractable.previousItem[i].OnInteract.Invoke();
+
+                                hasPreviousItem = true;
+                                break;
+                            }
+                        }
+
+                        // If the item is grabbable, store its original position and rotation, and move it to the objectViewer.
                         if (currentInteractable.item.grabbable)
                         {
-                            originPosition = currentInteractable.transform.position;                    // Save the original position before moving.
-                            originRotation = currentInteractable.transform.rotation;                    // Save the original rotation before moving.
-                            StartCoroutine(MovingObject(currentInteractable, objectViewer.position));   // Start moving the object to the viewer position.
+                            originPosition = currentInteractable.transform.position;
+                            originRotation = currentInteractable.transform.rotation;
+                            StartCoroutine(MovingObject(currentInteractable, objectViewer.position));
                         }
-                    }  
-                } 
-                
+
+                        // If a previous item interaction has happened, exit function.
+                        if (hasPreviousItem)
+                        {
+                            return;
+                        }
+
+                        Interact(currentInteractable.item);     // Interact with current item if no previous item interaction has happened.
+                    }
+                }
+
             }
+
+            // If the object is NOT interactable, revert to the default cursor.
             else
             {
-                UI_Manager.instance.SetHandCursor(false);                               // If the object is NOT interactable, revert to the default cursor.
+                UI_Manager.instance.SetHandCursor(false);
             }
         }
+        // If nothing is hit by the raycast, revert to the default cursor.
         else
         {
-            UI_Manager.instance.SetHandCursor(false);                                   // If nothing is hit by the raycast, revert to the default cursor.
+            UI_Manager.instance.SetHandCursor(false);
         }
     }
 
     // Handles what happens when interacting with an item.
     void Interact(Item item)
     {
-        if(item.image != null) 
-            {
-            UI_Manager.instance.SetImage(item.image);
-            }
+        currentItem = item;     // Track the item being interacted with.              
 
+        // Display item image to UI if it has one.
+        if (item.image != null)
+        {
+            UI_Manager.instance.SetImage(item.image);
+        }
+
+        // Play the item's audio clip and set its associated text in the UI.
         audioPlayer.PlayAudio(item.audioClip);
         UI_Manager.instance.SetCaptionText(item.text);
-        Invoke("CanFinish",item.audioClip.length +0.5f);
+
+        Invoke("CanFinish", item.audioClip.length + 0.5f);
     }
 
-    // Called after interaction finishes, allowing player to exit.
+    // Called after interaction finishes, allowing player to finish viewing an item.
     void CanFinish()
     {
         canFinish = true;
 
-        if(currentInteractable.item.image == null && !currentInteractable.item.grabbable)   // If item has no image and is not grabbable
+        // Automatically finish viewing if the item has no image and is not grabbable.
+        if (currentItem.image == null && !currentItem.grabbable)
         {
             FinishView();
         }
+
+        // Show the 'Back' UI option to finish viewing.
         else
         {
             UI_Manager.instance.SetBackImage(true);
@@ -143,21 +193,25 @@ public class Player_Interaction : MonoBehaviour
         UI_Manager.instance.SetCaptionText("");
     }
 
-    // Handles logic when player chooses to finish viewing an object.
+    // Function to finish viewing the current item and reset the viewing state.
     void FinishView()
     {
+        // Reset the canFinish and isViewing flags.
         canFinish = false;
         isViewing = false;
-        UI_Manager.instance.SetBackImage(false);  
 
-        if(currentInteractable.item.inventoryItem)
+        UI_Manager.instance.SetBackImage(false);
+
+        // Add item to player inventory if marked as collectible.
+        if (currentItem.inventoryItem)
         {
-            inventory.AddItem(currentInteractable.item);
+            inventory.AddItem(currentItem);
             audioPlayer.PlayAudio(writingSound);
             currentInteractable.CollectItem.Invoke();
         }
 
-        if(currentInteractable.item.grabbable)
+        // If the item is grabbable, return it to its original position and rotation.
+        if (currentItem.grabbable)
         {
             currentInteractable.transform.rotation = originRotation;
             StartCoroutine(MovingObject(currentInteractable, originPosition));
@@ -171,6 +225,8 @@ public class Player_Interaction : MonoBehaviour
     {
         obj.isMoving = true;
         float timer = 0;
+
+        // Gradually move object to target position over time.
         while (timer < 1)
         {
             obj.transform.position = Vector3.Lerp(obj.transform.position, position, Time.deltaTime * 5);
@@ -182,12 +238,12 @@ public class Player_Interaction : MonoBehaviour
         obj.isMoving = false;
     }
 
-    // Allows player to rotate the object while examining it.
+    // Rotate the interactable object based on mouse input.
     private void RotateObject()
     {
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        currentInteractable.transform.Rotate(myCam.transform.right, -Mathf.Deg2Rad * y * rotateSpeed, Space.World);
-        currentInteractable.transform.Rotate(myCam.transform.up, -Mathf.Deg2Rad * x * rotateSpeed, Space.World);
+        currentInteractable.transform.Rotate(myCam.transform.right, -Mathf.Deg2Rad * y * rotateSpeed, Space.World); // Rotate object around camera's right axis based on vertical mouse movement.
+        currentInteractable.transform.Rotate(myCam.transform.up, -Mathf.Deg2Rad * x * rotateSpeed, Space.World);    // Rotate object around camera's up axis based on horizontal movement.
     }
 }

@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbable: 0
   audioClip: {fileID: 8300000, guid: 0b025f7d03e341147ba32cc98c43cb9c, type: 3}
-  text: I am not crazy, what does that mean? I cannot understand it.
+  text: '"I am not crazy, what does that mean? I cannot understand it."'
   image: {fileID: 21300000, guid: 6f70e88c482839c4eb6fcad315534bd1, type: 3}
+  inventoryItem: 0
+  collectMessage: 

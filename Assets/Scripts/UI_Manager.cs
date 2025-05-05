@@ -6,33 +6,41 @@ using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
 {
-    public static UI_Manager instance;          // Instance for easy access by other scripts.
+    public static UI_Manager instance;          // Singleton instance of UIManager, allowing access to its methods and variables from other scripts.
+
+    // UI elements for different interaction feedbacks and the inventory system.
     public GameObject handCursor;               // Hand icon shown when hovering over interactable objects.
     public GameObject backImage;                // Background image shown during object viewing.
     public TextMeshProUGUI captionText;         // Text field showing item descriptions.
     public Image interactionImage;              // Image displaying associated item visuals.
-    public GameObject inventoryImage;
-    public TextMeshProUGUI[] inventoryItems;
-    public TextMeshProUGUI infoText;
+    public GameObject inventoryImage;           // The entire inventory UI panel.
+    public TextMeshProUGUI[] inventoryItems;    // Array of TextMeshProUGUI for showing item names in inventory slots.
+    public Image[] itemImage;                   // Array of UI Images to display item icons in the inventory.
+    public TextMeshProUGUI infoText;            // Text UI for providing information or feedback to the player.
 
+    // Called when the script instance is being loaded.
     private void Awake()
     {
-        instance = this;                        // Initialise the instance of the UI_Manager.
+        instance = this;        // Initialise the instance of the UI_Manager.
     }
 
+    // Called once per frame.
     private void Update()
     {
+        // Toggles the inventory UI on or off when the "I" key is pressed.
         if (Input.GetKeyDown(KeyCode.I))
         {
-            inventoryImage.SetActive(!inventoryImage.activeInHierarchy);
+            inventoryImage.SetActive(!inventoryImage.activeInHierarchy);    // Switch the active state of the inventory UI.
         }
     }
 
+    // Sets the caption text displayed on the UI.
     public void SetCaptionText(string text)
     {
-        captionText.text = text;                // Update the caption text displayed on screen.
+        captionText.text = text;                // Updates the captionText UI element with the provided text.
     }
 
+    // Toggles the visibility of the hand cursor UI element.
     public void SetHandCursor(bool state)
     {
         handCursor.SetActive(state);            // Enable or disable the hand cursor.
@@ -42,13 +50,14 @@ public class UI_Manager : MonoBehaviour
     {
         backImage.SetActive(state);             // Enable or disable the background image during item viewing.
 
-        // Hide the interaction image if background is disabled.
+        // Hides the interaction image when the back button is not active
         if (!state)
         {
-            interactionImage.enabled = false;
+            interactionImage.enabled = false;   
         }
     }
 
+    // Updates the interaction image to display a specific sprite and enables it.
     public void SetImage(Sprite sprite)
     {
         // Update and show the interaction image based on the current item.
@@ -56,16 +65,23 @@ public class UI_Manager : MonoBehaviour
         interactionImage.enabled = true;
     }
 
+    // Updates the inventory slot with the given item's information at the specified index.
     public void SetItems(Item item, int index)
     {
-        inventoryItems[index].text = item.collectMessage;
-        infoText.text = item.collectMessage;
-        StartCoroutine(FadingText());
+        inventoryItems[index].text = item.collectMessage;   // Sets the inventory slot text to the item's collection message.
+        infoText.text = item.collectMessage;                // Displays the same message as temporary feedback to the player.
+        itemImage[index].enabled = true;                    // Enables the item image at the given index.
+        itemImage[index].sprite = item.itemIcon;            // Sets the image sprite to the item's icon.
+
+        StartCoroutine(FadingText());                       // Starts the coroutine to fade in and out the infoText
     }
 
+    // Fades the feedback text in and out over a short delay.
     IEnumerator FadingText()
     {
         Color newColor = infoText.color;
+
+        // Fade in: Increase the alpha value of the text color from 0 to 1 over time.
         while (newColor.a <1)
         {
             newColor.a += Time.deltaTime;
@@ -73,8 +89,9 @@ public class UI_Manager : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2f);    // Wait for 2 seconds with the text fully visible
 
+        // Fade out: Decrease the alpha value of the text color from 1 to 0 over time.
         while (newColor.a > 0)
         {
             newColor.a -= Time.deltaTime;

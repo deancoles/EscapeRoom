@@ -7,9 +7,10 @@ public class AudioPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
 
+    // Get and store the AudioSource component attached to this GameObject.
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();  // Get and store the AudioSource component attached to this GameObject.
+        audioSource = GetComponent<AudioSource>();  
     }
 
     // Plays a single sound clip once
