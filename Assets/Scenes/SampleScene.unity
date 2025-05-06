@@ -1153,6 +1153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: bf4fd849028df7747bf4cf45a33cab4c, type: 2}
+  newItem: {fileID: 0}
   previousItem: []
   onInteract:
     m_PersistentCalls:
@@ -15737,6 +15738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
+  newItem: {fileID: 0}
   previousItem: []
   onInteract:
     m_PersistentCalls:
@@ -16928,6 +16930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
+  newItem: {fileID: 0}
   previousItem: []
   onInteract:
     m_PersistentCalls:
@@ -16970,6 +16973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: fce91174fb5956746a65353b2cd5d981, type: 2}
+  newItem: {fileID: 0}
   previousItem: []
   onInteract:
     m_PersistentCalls:
@@ -25076,6 +25080,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 3c345a750ad92c444bd244c4820e9e95, type: 2}
+  newItem: {fileID: 11400000, guid: 6927c8b547bc4854bb8ffcf757610df4, type: 2}
   previousItem:
   - requiredItem: {fileID: 11400000, guid: fce91174fb5956746a65353b2cd5d981, type: 2}
     interactionItem: {fileID: 11400000, guid: 6927c8b547bc4854bb8ffcf757610df4, type: 2}
@@ -28602,6 +28607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 4884fec2e3af9904ba474c534fd31c44, type: 2}
+  newItem: {fileID: 0}
   previousItem: []
   onInteract:
     m_PersistentCalls:

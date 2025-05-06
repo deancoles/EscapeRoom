@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -97,6 +98,39 @@ public class UI_Manager : MonoBehaviour
             newColor.a -= Time.deltaTime;
             infoText.color = newColor;
             yield return null;
+        }
+    }
+
+    // Remove an item from the UI.
+    public void RemoveItem(int index)
+    {
+        if (index < 0 || index >= inventoryItems.Length)
+        {
+            return;
+        }
+
+        inventoryItems[index].text = "";    // Clears item text.
+        itemImage[index].enabled = false;   // Hides item image.
+        itemImage[index].sprite = null;     // Reset the sprite/
+    }
+
+    public void RefreshItems(List<Item> items)
+    {
+        // Clears the UI inventory and updates it with the new list.
+        for (int i = 0;  i < inventoryItems.Length; i++)
+        {
+            if (i < items.Count)
+            {
+                inventoryItems[i].text = items[i].collectMessage;
+                itemImage[i].enabled = true;
+                itemImage[i].sprite = items[i].itemIcon;
+            }
+            else
+            {
+                inventoryItems[i].text = "";   
+                itemImage[i].enabled = false;   
+                itemImage[i].sprite = null;    
+            }
         }
     }
 }

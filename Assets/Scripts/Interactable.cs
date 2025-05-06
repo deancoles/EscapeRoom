@@ -16,6 +16,7 @@ public class PreviousItem
 public class Interactable : MonoBehaviour
 {
     public Item item;               // The item data associated with this interactable object.
+  
 
     public PreviousItem[] previousItem;
     public UnityEvent onInteract;

@@ -117,6 +117,9 @@ public class Player_Interaction : MonoBehaviour
                                 Interact(currentInteractable.previousItem[i].interactionItem);
                                 currentInteractable.previousItem[i].OnInteract.Invoke();
 
+                                inventory.RemoveItem(currentInteractable.previousItem[i].requiredItem);
+                                currentInteractable.item = currentInteractable.previousItem[i].interactionItem;
+
                                 hasPreviousItem = true;
                                 break;
                             }
