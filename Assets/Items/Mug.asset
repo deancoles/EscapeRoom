@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: Mug
   m_EditorClassIdentifier: 
   grabbable: 1
-  audioClip: {fileID: 8300000, guid: c6c3b5dc2281c9446b0774355482e0ae, type: 3}
-  text: '"A mug... Who does this belong to?
-
-    Doesn''t matter. I don''t need it
-    anyway."'
+  audioClip: {fileID: 8300000, guid: 44026bd2a3b4b26469004ec2dde2016e, type: 3}
+  text: "\"Hmm\u2026 just a regular mug. Wait\u2026 what\u2019s this? A number?<color=red>
+    \n910 </color>\n\u2026Could this mean something?\""
   image: {fileID: 0}
-  inventoryItem: 0
-  collectMessage: 
+  inventoryItem: 1
+  collectMessage: 910
+  itemIcon: {fileID: 21300000, guid: ee3362eacf309b649b859e3aaea2ab61, type: 3}

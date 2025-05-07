@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 037561ee0bafef84380bac0a979ab904, type: 3}
-  m_Name: Battery
+  m_Name: Fuel
   m_EditorClassIdentifier: 
   grabbable: 1
-  audioClip: {fileID: 8300000, guid: acd28c57d2a446b4ba576019b6048739, type: 3}
-  text: "\"A battery... Might come in handy.\r\nCould use this for something... Maybe
-    that old radio?\"\r"
+  audioClip: {fileID: 8300000, guid: d8aea01ea6c306f4c904268fd574c71f, type: 3}
+  text: "\"A fuel tank\u2026Feels like there\u2019s still some left. Might come in
+    handy.\""
   image: {fileID: 0}
   inventoryItem: 1
-  collectMessage: 'Battery '
-  itemIcon: {fileID: 21300000, guid: 04deae81546c49e4e9351dbb6ccd2ea1, type: 3}
+  collectMessage: Fuel
+  itemIcon: {fileID: 21300000, guid: 171402c2eae2b1545a0884529f76894f, type: 3}

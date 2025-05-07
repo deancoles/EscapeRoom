@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 037561ee0bafef84380bac0a979ab904, type: 3}
-  m_Name: Battery
+  m_Name: Statue With Gem
   m_EditorClassIdentifier: 
-  grabbable: 1
-  audioClip: {fileID: 8300000, guid: acd28c57d2a446b4ba576019b6048739, type: 3}
-  text: "\"A battery... Might come in handy.\r\nCould use this for something... Maybe
-    that old radio?\"\r"
+  grabbable: 0
+  audioClip: {fileID: 8300000, guid: a81c81499e87fee4da716030e4334b5a, type: 3}
+  text: "\"Alright\u2026let\u2019s see if this does anything. Whoa\u2026something\u2019s
+    moving!. A hidden box\u2026Now this is interesting.\""
   image: {fileID: 0}
-  inventoryItem: 1
-  collectMessage: 'Battery '
-  itemIcon: {fileID: 21300000, guid: 04deae81546c49e4e9351dbb6ccd2ea1, type: 3}
+  inventoryItem: 0
+  collectMessage: 
+  itemIcon: {fileID: 0}

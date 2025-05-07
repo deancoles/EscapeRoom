@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 037561ee0bafef84380bac0a979ab904, type: 3}
-  m_Name: Battery
+  m_Name: Statue No Gem
   m_EditorClassIdentifier: 
-  grabbable: 1
-  audioClip: {fileID: 8300000, guid: acd28c57d2a446b4ba576019b6048739, type: 3}
-  text: "\"A battery... Might come in handy.\r\nCould use this for something... Maybe
-    that old radio?\"\r"
+  grabbable: 0
+  audioClip: {fileID: 8300000, guid: 2af64a429534b9541b1e3e4377998fbe, type: 3}
+  text: "\"A statue\u2026 looks old. Wait\u2026there\u2019s a small hole here. Wonder
+    what fits in there\u2026\""
   image: {fileID: 0}
-  inventoryItem: 1
-  collectMessage: 'Battery '
-  itemIcon: {fileID: 21300000, guid: 04deae81546c49e4e9351dbb6ccd2ea1, type: 3}
+  inventoryItem: 0
+  collectMessage: 
+  itemIcon: {fileID: 0}
