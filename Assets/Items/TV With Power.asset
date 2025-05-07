@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037561ee0bafef84380bac0a979ab904, type: 3}
+  m_Name: TV With Power
+  m_EditorClassIdentifier: 
+  grabbable: 0
+  audioClip: {fileID: 8300000, guid: a5b90c13d3216ca4a96aed142efa8bec, type: 3}
+  text: '"This is an emergency alert-do not leave your homes! The outbreak has spread
+    rapidly.
+
+    If you encounter the infected, do not engage. Repeat, stay indoors
+    and stay quiet!"'
+  image: {fileID: 0}
+  inventoryItem: 0
+  collectMessage: 
+  itemIcon: {fileID: 0}
