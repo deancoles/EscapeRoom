@@ -114,9 +114,9 @@ public class UI_Manager : MonoBehaviour
         itemImage[index].sprite = null;     // Reset the sprite/
     }
 
+    // Clears the UI inventory and updates it with the new list.
     public void RefreshItems(List<Item> items)
     {
-        // Clears the UI inventory and updates it with the new list.
         for (int i = 0;  i < inventoryItems.Length; i++)
         {
             if (i < items.Count)

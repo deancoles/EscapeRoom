@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Player_Inventory : MonoBehaviour
 {
-    public List<Item> items;
+    public List<Item> items;        // List storing all items currently held by the player.
 
+    // Adds an item to the player’s inventory if it’s not already present and updates the UI.
     public void AddItem(Item item)
     {
         if(items.Contains(item))
@@ -17,6 +18,7 @@ public class Player_Inventory : MonoBehaviour
         items.Add(item);
     }
 
+    // Removes an item from inventory and updates the inventory UI.
     public void RemoveItem(Item item)
     {
         if (item == null || !items.Contains(item))

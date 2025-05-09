@@ -8,19 +8,19 @@ public class MainMenu : MonoBehaviour
     private AudioSource audios;
     public AudioClip clickSFX;
 
-    // Start is called before the first frame update
     void Start()
     {
         audios = GetComponent<AudioSource>();
-
     }
 
+    // Plays the button click sound and loads the first playable scene.
     public void PlayGame()
     {
         SceneManager.LoadSceneAsync(1);
         audios.PlayOneShot(clickSFX);
     }
 
+    // Exits the game and plays a sound. Note: this won't work in the Unity Editor.
     public void OnApplicationQuit()
     {
         Application.Quit();

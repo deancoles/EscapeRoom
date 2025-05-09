@@ -7,7 +7,7 @@ public class ChangeLevel : MonoBehaviour
 {
     public int goToLevel;
 
-
+    // Loads a new scene when the player enters the trigger collider.
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
