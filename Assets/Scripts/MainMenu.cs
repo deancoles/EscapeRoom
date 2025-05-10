@@ -11,6 +11,10 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         audios = GetComponent<AudioSource>();
+
+        // Show the cursor and unlock it on the main menu
+        UnityEngine.Cursor.visible = true;
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
     }
 
     // Plays the button click sound and loads the first playable scene.

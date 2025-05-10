@@ -44,6 +44,10 @@ public class Player_Interaction : MonoBehaviour
     void Start()
     {
         myCam = Camera.main;    // Set the Camera reference to the main camera in the scene.
+
+        // Hide the cursor and lock it to the centre of the screen
+        UnityEngine.Cursor.visible = false;
+        UnityEngine.Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
